@@ -1,7 +1,10 @@
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
+import pandas as pd
 
-def get_two_dates(string, cur_year = 2020):
+# get string from exel cell format dd-dd.mm
+# and return tuple of two strings
+def get_two_dates(string):
     ss = string.split('-')
     d1 = dt.strptime(ss[0],'%d')
     d2 = dt.strptime(ss[1],'%d.%m')
@@ -18,3 +21,14 @@ def get_two_dates(string, cur_year = 2020):
 
 
     return (d1,d2)
+
+# reformat dataframe for visualisation and working
+def reformat_dataframe(row):
+       
+    
+    return pd.Series([1, 2], index=['foo', 'bar'])
+
+
+
+
+    
