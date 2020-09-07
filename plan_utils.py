@@ -1,24 +1,33 @@
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
 import pandas as pd
+import plan_var as V
 
 # get string from exel cell format dd-dd.mm
 # and return tuple of two strings
+#TODO there is a cells dd/dd.mm
 def get_two_dates(string):
     ss = string.split('-')
 
     if len(ss) == 1:
         ss.append(ss[0])
         d1 = dt.strptime(ss[0],'%d.%m')
+        d2 = d1
     else:
-        d1 = dt.strptime(ss[0],'%d')
+        s = ss[0].split('.')
+        if len(s) == 2:
+            d1 = dt.strptime(ss[0],'%d.%m')
+        else:
+            d1 = dt.strptime(ss[0],'%d')    
 
-    d2 = dt.strptime(ss[1],'%d.%m')
-
-    d1 = d1.replace(month = d2.month)
-    
-    if d1.day > d2.day:
-        d1 = d1 - relativedelta(months=1)
+        ss[1] = ss[1].split(' ', 1)[0]
+        d2 = dt.strptime(ss[1],'%d.%m')
+        if d1.day > d2.day:
+            day = d1.day
+            d1 = d2 - relativedelta(months=1)
+            d1 = d1.replace(day=day)
+        else:
+            d1 = d1.replace(month=d2.month)
     
     d1 = d1.replace(year = dt.today().year)
     d2 = d2.replace(year = dt.today().year)
@@ -29,6 +38,7 @@ def get_two_dates(string):
 
     return [d1,d2]
 
+# delete rows if it is not about zz
 def delete_rows(df):
     dropIndexes = list()
     for i in df.index.values.tolist():
@@ -39,16 +49,28 @@ def delete_rows(df):
 
 # reformat dataframe for visualisation and working
 def reformat_dataframe(row):
-    s = pd.Series()#[row[0], row[0]], index=['StartBuildingBot', 'StartBuildingBot'])
     
-    if is_date(row[0]):
-        s = s.append(pd.Series(get_two_dates(row[0]), index=['j','k']))
+    i = 0
+    while type(row[i]) != dt:     
+        row = row.append(get_two_coulums(row,i))
+        i += 1
+    
+    return row
+
+# get cell and return two Series coulum with Start and Finish datetime dates
+def get_two_coulums(row, ind):
+    s = pd.Series()
+
+    if is_date(row[ind]):
+        s = pd.Series(get_two_dates(row[ind]))
     else:
-        s = s.append(pd.Series([row[0], row[0]], index=['j','k']))
+        s = pd.Series([row[ind], row[ind]])
+    s = s.rename({0: V.ColumnNames[ind*2], 1 : V.ColumnNames[ind*2+1]})
     
-    return row.append(s)
+    return s
 
 
+# checks if cell is date or not
 def is_date(cell):
     if (cell == 'нет') | (cell == 'готов'):
         return False
