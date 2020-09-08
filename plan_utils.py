@@ -51,21 +51,48 @@ def delete_rows(df):
 def reformat_dataframe(row):
     
     i = 0
-    while type(row[i]) != dt:     
-        row = row.append(get_two_coulums(row,i))
+    while type(row[i]) != dt:
+        if i in V.DoubleCoulums:
+            row = row.append(get_four_coulums(row,i))
+        else:
+            row = row.append(get_two_coulums(row,i))
         i += 1
+    
+    row = row.append(pd.Series([row[i], row[i+1]], V.ColumnNames[-2:]))
     
     return row
 
-# get cell and return two Series coulum with Start and Finish datetime dates
-def get_two_coulums(row, ind):
+#get cell and return four Series coulum with Start and Finish datatime dates
+def get_four_coulums(row,ind):
     s = pd.Series()
+    s = s.append(get_two_coulums(row, ind=ind, dic=True, dict_index=0))
+    s = s.append(get_two_coulums(row, ind=ind, dic=True, dict_index=2))
+    return s
 
-    if is_date(row[ind]):
-        s = pd.Series(get_two_dates(row[ind]))
+
+# get cell and return two Series coulum with Start and Finish datetime dates
+def get_two_coulums(row, ind = 0, dic = False, dict_index = 0):
+    s = pd.Series()
+    string = ' '
+
+    if not dic:
+        string = row[ind]
     else:
-        s = pd.Series([row[ind], row[ind]])
-    s = s.rename({0: V.ColumnNames[ind*2], 1 : V.ColumnNames[ind*2+1]})
+        if '/' in row[ind]:
+            ss = row[ind].split('/')
+            string = ss[int(dict_index/2)]
+        else:
+            string = row[ind]
+
+    if is_date(string):
+        s = pd.Series(get_two_dates(string))
+    else:
+        s = pd.Series([string, string])
+
+    if not dic:
+        s = s.rename({0: V.ColumnNames[ind*2], 1 : V.ColumnNames[ind*2+1]})
+    else:
+        s = s.rename({0: V.DoubleCoulums[ind][dict_index], 1 : V.DoubleCoulums[ind][dict_index+1]})
     
     return s
 
