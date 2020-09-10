@@ -2,6 +2,7 @@ from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 import plan_var as V
+import pyparsing as pp
 
 # get string from exel cell format dd-dd.mm
 # and return tuple of two strings
@@ -106,6 +107,62 @@ def is_date(cell):
     return True
 
 
+'''
+Get cell value and return tuple
+(str - date format,
+ list - parsed date values)
+ for example if cell = 23.09/24.09 then retuen value will be
+ ('dd.mm/dd.mm', ['23','09','24','09'])
+'''
+def get_cell_format(cell):
 
+    rus_alphas = 'йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ'
+    pp_alph = pp.alphas + rus_alphas
+    pp_opt_letter = pp.Optional(pp.Word(pp_alph))
+    pp_ddmm = pp.Word(pp.nums) + pp.Suppress('.') + pp.Word(pp.nums)
 
-    
+    if cell is None:
+        return None
+
+    try:
+        st = pp.Word(pp_alph).parseString(cell)
+        return ('word', list(st))
+    except pp.ParseException:
+        pass
+
+    try:
+        p = pp.Word(pp.nums) + pp.Suppress('-') + pp_ddmm + pp_opt_letter
+        st = p.parseString(cell)
+        return ('dd-dd.mm', list(st))
+    except pp.ParseException:
+        pass
+
+    try:
+        p = pp_ddmm + pp.Suppress('-') + pp_ddmm + pp_opt_letter
+        st = p.parseString(cell)
+        return ('dd.mm-dd.mm', list(st))
+    except pp.ParseException:
+        pass
+
+    try:
+        p = pp_ddmm + pp.Suppress('/') + pp_ddmm + pp_opt_letter
+        st = p.parseString(cell)
+        return ('dd.mm/dd.mm', list(st))
+    except pp.ParseException:
+        pass
+
+    try:
+        p = pp.Word(pp.nums) + pp.Suppress('/') + pp_ddmm + pp_opt_letter
+        st = p.parseString(cell)
+        return ('dd/dd.mm', list(st))
+    except pp.ParseException:
+        pass
+
+    try:
+        p = pp_ddmm + pp_opt_letter
+        st = p.parseString(cell)
+        return ('dd.mm', list(st))
+    except pp.ParseException:
+        pass
+
+    return ('unknown', [cell])
