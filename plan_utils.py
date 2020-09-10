@@ -7,6 +7,7 @@ import plan_var as V
 # and return tuple of two strings
 #TODO there is a cells dd/dd.mm
 def get_two_dates(string):
+    print(string)
     ss = string.split('-')
 
     if len(ss) == 1:
@@ -81,6 +82,7 @@ def get_two_coulums(row, ind = 0, dic = False, dict_index = 0):
         if '/' in row[ind]:
             ss = row[ind].split('/')
             string = ss[int(dict_index/2)]
+            print(string)
         else:
             string = row[ind]
 
