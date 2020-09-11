@@ -3,7 +3,32 @@ import pandas as pd
 
 class PlanLoader:
     df = pd.DataFrame()
+    key_word = '№ з/з'
 
-    def __init__(self, exel_name):
+    def __init__(self, exel_name, key_word = '№ з/з', header = None):
         self.df = pd.read_excel(exel_name, sheet_name='2020')
+        self.key_word = key_word
+        self.create_indexes()
+        self.create_columns()
+    
+    #TODO make loading able without first empty string
+    def create_indexes(self):
+        icn = list((self.df == '№ з/з').sum(axis=0)).index(True)
+        self.df = self.df.set_index(self.df.iloc[:,icn].name)
+        self.df.index.name = None
+    
 
+    def create_columns(self):
+        #make row with key word as column names
+        crn = list(self.df.index).index(self.key_word)
+        self.df.columns = self.df.iloc[crn]
+        self.df = self.df.drop(labels=self.key_word, axis='index')
+
+        #rename colums with empty names
+        cn = self.df.columns
+        rv = cn.isnull()
+        l = list(cn)
+        for i in range(1, len(l)):
+            if rv[i]:
+                l[i] = l[i-1] + '_1'
+        self.df.columns = l
