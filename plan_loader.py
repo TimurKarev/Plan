@@ -1,22 +1,28 @@
 import pandas as pd
+import pyparsing as pp
 
 
 class PlanLoader:
     df = pd.DataFrame()
-    key_word = '№ з/з'
 
     def __init__(self, exel_name, key_word = '№ з/з', header = None):
+        
+        self.key_word = key_word
+
         self.df = pd.read_excel(exel_name, sheet_name='2020')
         self.key_word = key_word
         self.create_indexes()
         self.create_columns()
+        self.delete_rows()
+        
+        self.df.fillna('нет', inplace=True)
     
     #TODO make loading able without first empty string
     def create_indexes(self):
         icn = list((self.df == '№ з/з').sum(axis=0)).index(True)
         self.df = self.df.set_index(self.df.iloc[:,icn].name)
         self.df.index.name = None
-    
+
 
     def create_columns(self):
         #make row with key word as column names
@@ -32,3 +38,14 @@ class PlanLoader:
             if rv[i]:
                 l[i] = l[i-1] + '_1'
         self.df.columns = l
+
+    def delete_rows(self):
+        self.df.index = self.df.index.fillna('delete')
+
+        for i in self.df.index.values:
+            try:
+                pp.Word(pp.nums).parseString(str(i))
+            except pp.ParseException:
+                #print(i)
+                self.df = self.df.drop([i])
+        
