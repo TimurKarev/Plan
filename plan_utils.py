@@ -122,7 +122,7 @@ def get_cell_format(cell):
     pp_ddmm = pp.Word(pp.nums) + pp.Suppress('.') + pp.Word(pp.nums)
 
     if cell is None:
-        return None
+        return ('None', [None])
 
     try:
         st = pp.Word(pp_alph).parseString(cell)
@@ -166,3 +166,12 @@ def get_cell_format(cell):
         pass
 
     return ('unknown', [cell])
+
+
+def check_row_for_dates(row):
+        
+    for i in row:
+        if get_cell_format(i)[0] not in V.Not_date:
+            return False
+    
+    return True
