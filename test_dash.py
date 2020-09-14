@@ -1,30 +1,43 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
 import plotly.express as px
-
 import pandas as pd
-
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
+from reformatter import *
+from plan_loader import PlanLoader
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+plan_loader = PlanLoader('план.xlsx')
+plan_loader.delete_rows_ready()
+ref = PlanReformatter(plan_loader.df)
+
+gantt_df  = ref.get_df_for_gantt(5)
+
+i=0
+l = []
+while i < len(ColumnNames)-2:
+    l.append(ColumnNames[i][:-4])
+    i+=2
+
+fig = px.timeline(gantt_df, x_start="Start", x_end="Finish", y="Task", color='Task', category_orders={'Task':l}, facet_row="zakaz",
+                  width=1800, height=900)
+#fig.update_yaxes(autorange="reversed") # otherwise tasks are listed from the bottom up
+fig.update_yaxes(matches=None)
+fig.update_xaxes(dtick='D1')
+
+
 app.layout = html.Div([
-    dcc.Graph(id='graph-with-slider'),
-    dcc.Slider(
-        id='year-slider',
-        min=df['year'].min(),
-        max=df['year'].max(),
-        value=df['year'].min(),
-        marks={str(year): str(year) for year in df['year'].unique()},
-        step=None
-    )
+    dcc.Graph(
+        id='graph-with-slider',
+        figure=fig,
+    ),
+
 ])
 
-
+'''
 @app.callback(
     Output('graph-with-slider', 'figure'),
     [Input('year-slider', 'value')])
@@ -38,7 +51,7 @@ def update_figure(selected_year):
     fig.update_layout(transition_duration=500)
 
     return fig
-
+'''
 
 if __name__ == '__main__':
     app.run_server(debug=True)

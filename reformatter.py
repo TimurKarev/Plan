@@ -54,8 +54,9 @@ def get_dates_from_tuple(tup, year=2020):
     if fr == 'dd/dd.mm':
         d.append(dt.strptime(st[0]+'.'+st[2], '%d.%m'))
         d.append(dt.strptime(st[1]+'.'+st[2], '%d.%m'))
-        if d[0].day > d[1].day:
-            d[0] = d[0] - relativedelta(months=1)
+        #if d[0].day > d[1].day:
+            #d[0] = d[0] - relativedelta(months=1)
+        print(d, len(d), st)
 
     if fr == 'dd.mm':
         d.append(dt.strptime(st[0]+'.'+st[1], '%d.%m'))
@@ -88,7 +89,7 @@ class PlanReformatter:
                 if len(d) == 1:
                     l.extend([d[0],d[0],d[0],d[0]])
                 if len(d) == 2:
-                    l.extend([d[0],d[1],d[0],d[1]])
+                    l.extend([d[0],d[0],d[1],d[1]])
                 if len(d) == 4:
                     l.extend(d)
             else:
@@ -115,7 +116,7 @@ class PlanReformatter:
                     self.gant_df = self.gant_df.append(pd.DataFrame([dict(Task=ser.index[i][:-4],
                                                         Start=ser[i] + timedelta(hours=8, minutes=20),
                                                         Finish=ser[i+1] + timedelta(hours=16, minutes=20),
-                                                        zakaz=ser.name if type(ser.name)==int else int(ser.name[:4]))]), ignore_index=True)
+                                                        zakaz=str(ser.name) if type(ser.name)==int else str(ser.name[:4]))]), ignore_index=True)
                     i+=1
                 i+=1
         return self.gant_df
