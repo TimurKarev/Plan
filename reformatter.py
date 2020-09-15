@@ -56,7 +56,7 @@ def get_dates_from_tuple(tup, year=2020):
         d.append(dt.strptime(st[1]+'.'+st[2], '%d.%m'))
         #if d[0].day > d[1].day:
             #d[0] = d[0] - relativedelta(months=1)
-        print(d, len(d), st)
+        #print(d, len(d), st)
 
     if fr == 'dd.mm':
         d.append(dt.strptime(st[0]+'.'+st[1], '%d.%m'))
