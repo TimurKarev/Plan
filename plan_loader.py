@@ -44,7 +44,6 @@ class PlanLoader:
 
         for i in self.df.index.values:
             try:
-                print(i)
                 pp.Word(pp.nums).parseString(str(i))
             except pp.ParseException:
                 self.df = self.df.drop([i], errors='ignore')

@@ -1,10 +1,17 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.express as px
+
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
 import pandas as pd
 from reformatter import *
 from plan_loader import PlanLoader
+from gantt_bar import *
+
+#cacidi.pythonanywhere.com
+#/home/cacidi/mysite/flask_app.py
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -14,20 +21,32 @@ plan_loader = PlanLoader('план.xlsx')
 plan_loader.delete_rows_ready()
 ref = PlanReformatter(plan_loader.df)
 
-gantt_df  = ref.get_df_for_gantt(5)
+gantt_df  = ref.get_df_for_gantt(15)
 
-i=0
-l = []
-while i < len(ColumnNames)-2:
-    l.append(ColumnNames[i][:-4])
-    i+=2
+l = ref.get_column_names(True)
+fig = go.Figure()
+b = GanttBar()
 
-fig = px.timeline(gantt_df, x_start="Start", x_end="Finish", y="Task", color='Task', category_orders={'Task':l}, facet_row="zakaz",
-                  width=1800, height=900)
-#fig.update_yaxes(autorange="reversed") # otherwise tasks are listed from the bottom up
-fig.update_yaxes(matches=None)
-fig.update_xaxes(dtick='D1')
+data = ref.get_df_for_gantt(25)
+for i in range(data.shape[0]):
+    fig.add_trace(b.get_bar(data['Start'][i], data['Finish'][i],
+                    l.index(data['Task'][i]), group=int(data['zakaz'][i])))
+    
+fig.update_layout(
+    yaxis = dict(
+        tickmode = 'array',
+        tickvals = [n for n in range(len(l))],
+        ticktext = l
+    ),
+    height = 800
+)
 
+fig.update_xaxes(
+    dtick='D1',
+    range=[dt.today() - timedelta(days=7),
+          dt.today() + timedelta(days=30)],
+    tickangle = 90,
+    )
 
 app.layout = html.Div([
     dcc.Graph(

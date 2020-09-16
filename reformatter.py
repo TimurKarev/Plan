@@ -120,3 +120,13 @@ class PlanReformatter:
                     i+=1
                 i+=1
         return self.gant_df
+
+    def get_column_names(self, reverse=False):
+        i=0
+        l = []
+        while i < len(ColumnNames)-2:
+            l.append(ColumnNames[i][:-4])
+            i+=2
+        if reverse:
+            l = l[::-1]
+        return l
