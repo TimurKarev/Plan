@@ -1,0 +1,65 @@
+astroid @ file:///tmp/build/80754af9/astroid_1592495912941/work
+attrs @ file:///tmp/build/80754af9/attrs_1598374659300/work
+backcall==0.2.0
+brotlipy==0.7.0
+certifi==2020.6.20
+cffi @ file:///tmp/build/80754af9/cffi_1598370769933/work
+click==7.1.2
+dash @ file:///home/conda/feedstock_root/build_artifacts/dash_1600086548246/work
+dash-core-components @ file:///home/conda/feedstock_root/build_artifacts/dash-core-components_1599715723697/work
+dash-html-components @ file:///home/conda/feedstock_root/build_artifacts/dash-html-components_1599715712112/work
+dash-renderer @ file:///home/conda/feedstock_root/build_artifacts/dash-renderer_1599715739799/work
+dash-table @ file:///home/conda/feedstock_root/build_artifacts/dash-table_1599810523485/work
+decorator==4.4.2
+Flask==1.1.2
+Flask-Compress==1.5.0
+future==0.18.2
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1593446406207/work
+ipykernel @ file:///tmp/build/80754af9/ipykernel_1596207638929/work/dist/ipykernel-5.3.4-py3-none-any.whl
+ipython @ file:///tmp/build/80754af9/ipython_1598883821407/work
+ipython-genutils==0.2.0
+isort @ file:///tmp/build/80754af9/isort_1598376147378/work
+itsdangerous==1.1.0
+jedi @ file:///tmp/build/80754af9/jedi_1598371611696/work
+Jinja2==2.11.2
+jsonschema==3.2.0
+jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1594826976318/work
+jupyter-core==4.6.3
+lazy-object-proxy==1.4.3
+MarkupSafe==1.1.1
+mccabe==0.6.1
+mkl-fft==1.1.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+nbformat==5.0.7
+numpy @ file:///tmp/build/80754af9/numpy_and_numpy_base_1596233721170/work
+pandas @ file:///tmp/build/80754af9/pandas_1598371468004/work
+parso==0.7.0
+patsy==0.5.1
+pexpect==4.8.0
+pickleshare==0.7.5
+plotly==4.10.0
+plotly-express==0.4.1
+prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1598885458782/work
+ptyprocess==0.6.0
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1593275161868/work
+Pygments==2.6.1
+pylint @ file:///tmp/build/80754af9/pylint_1598623985952/work
+pyparsing==2.4.7
+pyrsistent==0.16.0
+python-dateutil==2.8.1
+pytz==2020.1
+PyYAML==5.3.1
+pyzmq==19.0.1
+retrying==1.3.3
+scipy @ file:///tmp/build/80754af9/scipy_1597686649129/work
+six==1.15.0
+statsmodels==0.11.1
+toml @ file:///tmp/build/80754af9/toml_1592853716807/work
+tornado==6.0.4
+traitlets==4.3.3
+wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
+Werkzeug==1.0.1
+wrapt==1.11.2
+xlrd==1.2.0
+zipp==3.1.0

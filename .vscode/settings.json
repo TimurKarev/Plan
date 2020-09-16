@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\User\\.conda\\envs\\plan\\python.exe",
+    "python.pythonPath": "/home/timur/anaconda3/envs/plan/bin/python",
     "python.linting.pylintEnabled": true,
     "python.linting.pycodestyleEnabled": false,
     "python.linting.enabled": true

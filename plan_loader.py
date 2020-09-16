@@ -2,6 +2,8 @@ import pandas as pd
 import pyparsing as pp
 import plan_utils as pu
 
+import os
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 class PlanLoader:
     df = pd.DataFrame()
@@ -9,7 +11,8 @@ class PlanLoader:
     def __init__(self, exel_name, key_word='№ з/з', header=None):
 
         self.key_word = key_word
-
+        my_file = os.path.join(THIS_FOLDER, exel_name)
+        self.df = pd.read_excel(my_file, sheet_name='2020')
         self.df = pd.read_excel(exel_name, sheet_name='2020')
         self.key_word = key_word
         self.create_indexes()
