@@ -106,9 +106,15 @@ class PlanReformatter:
         ser = ser.rename(dic)
         return ser.append(pd.Series(row[-2:]))
 
-    def get_df_for_gantt(self, num=10):
+    def get_df_for_gantt(self, num=10, lag=None, begin=None, end=None):
         self.gant_df = pd.DataFrame()
-        dd = self.r_df.iloc[num*-1:]
+
+        #TODO create get num-lag function
+        l = None
+        if (lag is not None) | (lag is int):
+            l = -1 * lag
+
+        dd = self.r_df.iloc[num*-1: l]
         for ser in dd.iloc:
             i = 0
             while i < len(ser) - 2:
@@ -116,7 +122,8 @@ class PlanReformatter:
                     self.gant_df = self.gant_df.append(pd.DataFrame([dict(Task=ser.index[i][:-4],
                                                         Start=ser[i] + timedelta(hours=8, minutes=20),
                                                         Finish=ser[i+1] + timedelta(hours=16, minutes=20),
-                                                        zakaz=str(ser.name) if type(ser.name)==int else str(ser.name[:4]))]), ignore_index=True)
+                                                        zakaz=str(ser.name) if type(ser.name)==int else str(ser.name[:4]))]),
+                                                        ignore_index=True)
                     i+=1
                 i+=1
         return self.gant_df
