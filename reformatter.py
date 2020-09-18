@@ -111,8 +111,8 @@ class PlanReformatter:
 
         #TODO create get num-lag function
         l = None
-        if (lag is not None) | (lag is int):
-            l = -1 * lag
+        if (lag is not None) & (type(lag) is int) & (lag != 0):
+            l = (-1 * lag)
 
         dd = self.r_df.iloc[num*-1: l]
         for ser in dd.iloc:

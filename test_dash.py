@@ -1,15 +1,19 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
-import pandas as pd
-from reformatter import *
-from plan_loader import PlanLoader
-from gantt_bar import *
+from controller import * 
 
+from reformatter import *
+from plan_loader import *
+
+from view import *
+
+#TODO переставить отметки времени наверх
 #cacidi.pythonanywhere.com
 #/home/cacidi/mysite/flask_app.py
 
@@ -17,40 +21,23 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-plan_loader = PlanLoader('план.xlsx')
-plan_loader.delete_rows_ready()
-ref = PlanReformatter(plan_loader.df)
 
-gantt_df  = ref.get_df_for_gantt(15)
-
-l = ref.get_column_names(True)
-fig = go.Figure()
-b = GanttBar()
-
-data = ref.get_df_for_gantt(25)
-for i in range(data.shape[0]):
-    fig.add_trace(b.get_bar(data['Start'][i], data['Finish'][i],
-                    l.index(data['Task'][i]), group=int(data['zakaz'][i])))
-    
-fig.update_layout(
-    yaxis = dict(
-        tickmode = 'array',
-        tickvals = [n for n in range(len(l))],
-        ticktext = l
-    ),
-    height = 800
-)
-
-fig.update_xaxes(
-    dtick='D1',
-    range=[dt.today() - timedelta(days=7),
-          dt.today() + timedelta(days=30)],
-    tickangle = 90,
-    )
+ctrl = Controller('план.xlsx')
+fig = ctrl.get_fig(10)
 
 app.layout = html.Div([
+    #TODO create validation system for input  max, min properties
+    #TODO make input areas smaller
+    dbc.Row([
+        dbc.Label("Количество заказов для вывода:  "),
+        dbc.Input(name='num_zakaz',type="number", inputMode='numeric', value=10),
+        dbc.Label("Не включать последние "),
+        dbc.Input(name='ign_zakaz', type="number", inputMode='numeric', value=0),
+        dbc.Label("заказов"),
+    ]),
+
     dcc.Graph(
-        id='graph-with-slider',
+        id='graph_plan',
         figure=fig,
     ),
 
