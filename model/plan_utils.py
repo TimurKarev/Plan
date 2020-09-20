@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
 import pandas as pd
-import plan_var as V
+from model import plan_var as V
 import pyparsing as pp
 
 # get string from exel cell format dd-dd.mm

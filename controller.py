@@ -1,16 +1,30 @@
-from plan_loader import *
-from reformatter import *
 from view import *
+from model.model import *
 
 class Controller:
     def __init__(self, filename):
-        self.view = ViewManager()
+        self.model = Model(filename)
+        jobs = self.model.get_list_of_jobs(True)
+        self.view = ViewManager(jobs, jobs)
 
-        pl = PlanLoader('план.xlsx')
-        pl.delete_rows_ready()
-        self.model = PlanReformatter(pl.df)
+    def get_fig(self):
+        return self.view.get_fig(self.model.current_df) 
 
-    def get_fig(self, num, ignore=None):
-        column_names = self.model.get_column_names(True)
+    #TODO make value chekings (???)
+    def set_zakaz_intervals(self, num, ignore=None):
+        self.model.set_zakaz_intervals(num,ignore)
 
-        return self.view.get_fig(self.model.get_df_for_gantt(num, ignore), column_names)
+    def get_job_checklist_list(self,):
+        l = self.model.get_list_of_jobs(False)
+        options = []
+        value = []
+        for i in range(len(l)):
+            d = {}
+            d['label'] = l[i]
+            d['value'] = l[i]
+            options.append(d)
+            value.append(l[i])
+        return (options, value)
+
+    def set_fig_exclude_jobs_list(self, exclude_list):
+        self.view.exclude_jobs = exclude_list
