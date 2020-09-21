@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import timedelta
 
 class ViewManager:
-    def __init__(self, jobs_names, exclude_jobs, height=700,):
+    def __init__(self, jobs_names, exclude_jobs, height=600,):
         self.fig = go.Figure()
         self.bar = GanttBar()
         self.height = height
@@ -21,12 +21,32 @@ class ViewManager:
                 self.fig.add_trace(self.bar.get_bar(data['Start'][i], data['Finish'][i],
                                 column_names.index(data['Task'][i]), group=int(data['zakaz'][i])))
 
+        #TODO move to separate block
+        self.fig.add_trace(go.Scatter(x=[dt.today(), dt.today()], y=[-2,22], showlegend=False, opacity=.4))
+        #self.fig.add_trace(go.Bar(x=[dt.today()], y=[23]))
+
         self.fig.update_layout(
             yaxis = dict(
                 tickmode = 'array',
                 tickvals = [n for n in range(len(column_names))],
                 ticktext = column_names,
+                range=[-1,18]
             ),
+            shapes=[
+                dict(
+                    type="rect",
+                    xref="x",
+                    yref="y",
+                    x0="2020-09-19",
+                    y0="-1",
+                    x1="2020-09-21",
+                    y1="21",
+                    fillcolor="lightgray",
+                    opacity=0.4,
+                    line_width=0,
+                    layer="below"
+                ),
+            ],
             height = self.height
         )
 
@@ -34,10 +54,7 @@ class ViewManager:
             dtick='D1',
             range=[dt.today() - timedelta(days=7),
                 dt.today() + timedelta(days=30)],
-            tickangle = 90,
-            side='top',
-            
             )
-        print('view', data.shape, len(self.fig.data))
+
         return self.fig
 

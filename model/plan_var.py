@@ -1,3 +1,5 @@
+Zakaz_intervals = (10,0)
+
 Not_date = ['None', 'unknown', 'word']
 
 ColumnNames = [

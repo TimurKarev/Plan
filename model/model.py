@@ -1,10 +1,11 @@
 from model.plan_loader import *
 from model.reformatter import *
+from  model import plan_var as V
 
 class Model:
     def __init__(self, filename):
-        self.num_zakaz = 25
-        self.ign_zakaz = 0
+        self.num_zakaz = V.Zakaz_intervals[0]
+        self.ign_zakaz = V.Zakaz_intervals[1]
         
         pl = PlanLoader('план.xlsx')
         pl.delete_rows_ready()

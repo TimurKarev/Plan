@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
@@ -55,27 +55,24 @@ app.layout = html.Div([
                 )
             ], width={'size': 1, 'order':'first'}
         ),
+    ]),
+
+    dbc.Row([
+        dbc.Button("Применить фильтры", id='reload_button', n_clicks=0)
     ])
 ])
 
 
 @app.callback(Output('graph_plan', 'figure'),
-    [Input('num_zakaz', 'value'), 
-     Input('ign_zakaz', 'value'),
-     Input('jobs_checklist', 'value')])
-def update_figure(num, ign, job_list):
-    ctx = dash.callback_context
-    trig = ctx.triggered[0]['prop_id'].split('.')[0]
-    
-    if trig in ['num_zalaz', 'ign_zakaz']:
-        ctrl.set_zakaz_intervals(num, ign)
-    elif trig == 'jobs_checklist':
-        ctrl.set_fig_exclude_jobs_list(job_list)
-        
-
+            [Input('reload_button', 'n_clicks')],
+            [State('num_zakaz','value'),
+            State('ign_zakaz', 'value'),
+            State('jobs_checklist', 'value')])
+def update_output(n_clicks, num_zakaz, ign_zakaz, job_list):
+    ctrl.set_zakaz_intervals(num_zakaz, ign_zakaz)
+    ctrl.set_fig_exclude_jobs_list(job_list)
     fig = ctrl.get_fig()
     return fig
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
