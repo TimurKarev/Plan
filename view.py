@@ -3,23 +3,33 @@ from gantt_bar import *
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
 from datetime import timedelta
+import holidays
 
 class ViewManager:
-    def __init__(self, jobs_names, exclude_jobs, height=600,):
+    def __init__(self, jobs_names, exclude_jobs, hight=600,):
         self.fig = go.Figure()
         self.bar = GanttBar()
-        self.height = height
+        self.hight = hight
         self.jobs_names = jobs_names
         self.exclude_jobs = exclude_jobs
 
-    def get_fig(self, data):
+    def get_fig(self, _data):
         self.fig.data = []
         self.bar = GanttBar()
-        column_names = self.jobs_names
-        for i in range(data.shape[0]):
-            if data['Task'][i] in self.exclude_jobs:
-                self.fig.add_trace(self.bar.get_bar(data['Start'][i], data['Finish'][i],
-                                self.exclude_jobs.index(data['Task'][i]), group=int(data['zakaz'][i])))
+        column_names = self.__get_column_names()
+        data = _data.copy()
+        data = data[data['Task'].isin(column_names)]
+        #print("col", column_names, data.shape, _data.shape)
+
+        try:
+            for _, i in data.iterrows():
+                #print(i)
+                ind = column_names.index(i['Task'])
+                #print(ind)
+                self.fig.add_trace(self.bar.get_bar(i['Start'], i['Finish'],
+                                ind, group=int(i['zakaz'])))
+        except Exception as e:
+            print('exeption', e)
 
         #TODO move to separate block
         self.fig.add_trace(go.Scatter(x=[dt.today(), dt.today()], y=[-2,22], showlegend=False, opacity=.4))
@@ -28,27 +38,13 @@ class ViewManager:
         self.fig.update_layout(
             yaxis = dict(
                 tickmode = 'array',
-                tickvals = [n for n in range(len(self.exclude_jobs))],
-                ticktext = self.exclude_jobs[::-1],
-                range=[-1,len(self.exclude_jobs)]
+                tickvals = [n for n in range(len(column_names))],
+                ticktext = column_names,
+                range=[-1,len(column_names)+.5]
             ),
             #TODO make holliday list
-            shapes=[
-                dict(
-                    type="rect",
-                    xref="x",
-                    yref="y",
-                    x0="2020-09-19",
-                    y0="-1",
-                    x1="2020-09-21",
-                    y1="21",
-                    fillcolor="lightgray",
-                    opacity=0.4,
-                    line_width=0,
-                    layer="below"
-                ),
-            ],
-            height = self.height
+            shapes=self.__get_weekend_shapes(),
+            height = self.hight
         )
 
         self.fig.update_xaxes(
@@ -60,4 +56,50 @@ class ViewManager:
             )
 
         return self.fig
+
+
+    def __get_column_names(self):
+        col = self.jobs_names.copy()
+        i=0
+        while i < len(col):
+            if col[i] not in self.exclude_jobs:
+                col.pop(i)
+            else:
+                i+=1
+        return col
+
+    def __get_weekend_shapes(self):
+        shapes=[]
+        ru_holiday = holidays.RU()
+        b_dct = {
+            'type': "rect",
+            'xref': 'x',
+            'yref': "y",
+            'y0' : "-1",
+            'y1' : "21",
+            'fillcolor' : "lightgray",
+            'opacity' : 0.4,
+            'line_width' : 0,
+            'layer' : "below",
+        }
+
+        d = dt.today() - relativedelta(days=14)
+        d = d.replace(hour=0,minute=0,second=0, microsecond=0)
+
+        for i in range(124):
+            if d.weekday() == 5:
+                dct = b_dct.copy()
+                dct['x0'] =  d
+                dct['x1'] = d + relativedelta(days=2)
+                shapes.append(dct)
+            elif d in ru_holiday:
+                dct = b_dct.copy()
+                dct['x0'] =  d
+                dct['x1'] = d + relativedelta(days=1)
+                shapes.append(dct)
+
+            d = d + relativedelta(days=1)
+
+        return shapes
+
 

@@ -11,8 +11,9 @@ from controller import *
 # from view import *
 # from model.model import *
 
-#TODO Сделать интерактивную ширину экрана
-#TODO Make start intervals from global variables
+
+#TODO Сделать сохранение статусов после перезагрузки экрана
+
 #cacidi.pythonanywhere.com
 #/home/cacidi/mysite/flask_app.py
 
@@ -30,11 +31,13 @@ app.layout = html.Div([
     #TODO create validation system for input  max, min properties
     #TODO make input areas smaller
     dbc.Row([
-        dbc.Col(dbc.Label("Количество заказов для вывода:  "), width={'size':2}),
-        dbc.Col(dbc.Input(id='num_zakaz',type="number", inputMode='numeric', value=10), width={'size':1}),
+        dbc.Col(dbc.Label("Количество заказов для вывода:  "), width={'size':3}),
+        dbc.Col(dbc.Input(id='num_zakaz',type="number", inputMode='numeric', value=ctrl.num), width={'size':1}),
         dbc.Col(dbc.Label("Не включать последние "), width={'size':2}),
-        dbc.Col(dbc.Input(id='ign_zakaz', type="number", inputMode='numeric', value=0), width={'size':1}),
-        dbc.Col(dbc.Label("заказов")),
+        dbc.Col(dbc.Input(id='ign_zakaz', type="number", inputMode='numeric', value=ctrl.ign), width={'size':1}),
+        dbc.Col(dbc.Label("заказов"), width={'size': 1}),
+        dbc.Col(dbc.Label("Высота графика"), width = {'size':2, 'offset': 1}),
+        dbc.Col(dbc.Input(id='fig_hight', type="number", inputMode='numeric', value=V.Fig_hight), width={'size':1}),
     ]),
 
     dbc.Row([
@@ -48,6 +51,11 @@ app.layout = html.Div([
         dbc.Col(
             [
                 html.Label('Показывать работы'),
+                dbc.Checklist(
+                    id='jobs_sel_all',
+                    options=[{'label':' ','value':'True'}],
+                    value=['True']
+                ),
                 dbc.Checklist(
                     id='jobs_checklist',
                     options=cl_options,
@@ -63,16 +71,30 @@ app.layout = html.Div([
 ])
 
 
+@app.callback(Output('jobs_checklist', 'value'),
+            [Input('jobs_sel_all', 'value')], 
+            [State('jobs_checklist', 'value')])
+def update_joblis(value, lst):
+    l = []
+    if len(value):
+        _, l = ctrl.get_job_checklist_list()
+
+    return l
+
+
 @app.callback(Output('graph_plan', 'figure'),
             [Input('reload_button', 'n_clicks')],
             [State('num_zakaz','value'),
             State('ign_zakaz', 'value'),
-            State('jobs_checklist', 'value')])
-def update_output(n_clicks, num_zakaz, ign_zakaz, job_list):
+            State('jobs_checklist', 'value'), 
+            State('fig_hight', 'value')])
+def update_output(n_clicks, num_zakaz, ign_zakaz, job_list, hight):
     ctrl.set_zakaz_intervals(num_zakaz, ign_zakaz)
     ctrl.set_fig_exclude_jobs_list(job_list)
+    ctrl.set_fig_hight(hight)
     fig = ctrl.get_fig()
     return fig
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

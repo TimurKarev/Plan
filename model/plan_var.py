@@ -1,4 +1,5 @@
-Zakaz_intervals = (10,0)
+Zakaz_intervals = (25,0)
+Fig_hight = 600
 
 Not_date = ['None', 'unknown', 'word']
 
