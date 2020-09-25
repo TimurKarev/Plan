@@ -45,7 +45,7 @@ app.layout = html.Div([
             dcc.Graph(
                     id='graph_plan',
                     figure=fig,
-            ), width={'size': 11, 'order':'last'}
+            ), width={'size': 11, 'order':'first'}
         ),
 
         dbc.Col(
@@ -61,12 +61,14 @@ app.layout = html.Div([
                     options=cl_options,
                     value=cl_value
                 )
-            ], width={'size': 1, 'order':'first'}
+            ], width={'size': 1, 'order':'last'}
         ),
     ]),
 
     dbc.Row([
-        dbc.Button("Применить фильтры", id='reload_button', n_clicks=0)
+        dbc.Col(
+            [dbc.Button("Применить фильтры", id='reload_button', n_clicks=0)], width={'size': 11}
+        )
     ])
 ])
 

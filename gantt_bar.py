@@ -12,7 +12,7 @@ class GanttBar:
     def __init__(self):
         self.was_group = set()
 
-    def get_bar(self, st, fn, val, group=colors.qualitative.Dark24[5], delta=0.4):
+    def get_bar(self, st, fn, val, task, group=colors.qualitative.Dark24[5], delta=0.4):
         c = get_color(group)
         c = colors.qualitative.Dark24[c]
         self.line = go.scatter.Line(color=c, shape = 'hv', width=2.5)
@@ -26,7 +26,12 @@ class GanttBar:
                     opacity=0.5,
                     legendgroup=group,
                     showlegend=(group not in self.was_group),
-                    name=group)
+                    name=group,
+                    hovertemplate = '<b>{}</b> - {}'.format(group, task) + \
+                                    '<br>' + '{}'.format(st.strftime('%d-%m')) + \
+                                    '<br>' + '{}'.format(fn.strftime('%d-%m')) + \
+                                    '<extra></extra>'
+        )
 
         self.was_group.add(group)
         

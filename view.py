@@ -27,7 +27,7 @@ class ViewManager:
                 ind = column_names.index(i['Task'])
                 #print(ind)
                 self.fig.add_trace(self.bar.get_bar(i['Start'], i['Finish'],
-                                ind, group=int(i['zakaz'])))
+                                ind, i['Task'], group=int(i['zakaz'])))
         except Exception as e:
             print('exeption', e)
 
@@ -42,9 +42,11 @@ class ViewManager:
                 ticktext = column_names,
                 range=[-1,len(column_names)+.5]
             ),
-            #TODO make holliday list
             shapes=self.__get_weekend_shapes(),
-            height = self.hight
+            height = self.hight,
+            hoverlabel = dict(
+                font_size = 20
+            )
         )
 
         self.fig.update_xaxes(
