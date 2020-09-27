@@ -1,6 +1,6 @@
 from model.plan_loader import *
 from model.reformatter import *
-from  model import plan_var as V
+from model.plan_var import *
 
 class Model:
     def __init__(self, filename):

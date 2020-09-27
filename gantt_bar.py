@@ -12,7 +12,7 @@ class GanttBar:
     def __init__(self):
         self.was_group = set()
 
-    def get_bar(self, st, fn, val, task, group=colors.qualitative.Dark24[5], delta=0.4):
+    def get_bar(self, st, fn, val, task, group, working_hour, delta=0.4):
         c = get_color(group)
         c = colors.qualitative.Dark24[c]
         self.line = go.scatter.Line(color=c, shape = 'hv', width=2.5)
@@ -30,6 +30,7 @@ class GanttBar:
                     hovertemplate = '<b>{}</b> - {}'.format(group, task) + \
                                     '<br>' + '{}'.format(st.strftime('%d-%m')) + \
                                     '<br>' + '{}'.format(fn.strftime('%d-%m')) + \
+                                    '<br>' + 'часы - {}'.format(working_hour) + \
                                     '<extra></extra>'
         )
 

@@ -1,5 +1,7 @@
 from datetime import datetime as dt
-from dateutil.relativedelta import relativedelta
+from datetime import date
+from dateutil import relativedelta
+from dateutil.rrule import *
 import pandas as pd
 from model import plan_var as V
 import pyparsing as pp
@@ -175,3 +177,13 @@ def check_row_for_dates(row):
             return False
     
     return True
+
+
+def get_working_hours_from_timerange(st, fn, a, b):
+    #print(a, b)
+    t = 0
+    for d in rrule(DAILY, dtstart=st, until=fn):
+        if date(d.year,d.month,d.day) not in V.get_not_working_days():
+            t += 8
+
+    return t

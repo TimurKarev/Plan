@@ -1,3 +1,7 @@
+from datetime import datetime as dt
+from datetime import timedelta, date
+import holidays
+
 Zakaz_intervals = (25,0)
 Fig_hight = 600
 
@@ -26,6 +30,19 @@ ColumnNames = [
 
 DoubleCoulums = {7 : ['StShinaUvr', 'FnShinaUvr', 'StShinaTr', 'FnShinaTr'],
                  12: ['StInst04', 'FnInst04', 'StInst10', 'FnInst10']}
+
+NotWorkingDays = list()
+
+def get_not_working_days():
+    if len(NotWorkingDays) == 0:
+      d = dt.today() - timedelta(days=(31*5))
+      ru_hol = holidays.RU()
+      for i in range(366):
+        if (d.weekday() in [5,6]) | (d in ru_hol):
+          NotWorkingDays.append(date(d.year,d.month,d.day))
+        d = d + timedelta(days=1)
+
+    return NotWorkingDays
 
 # create list of final colum names from list and dict where dict indexes must be skiped from list
 # def get_FinalFinalColumnNames():

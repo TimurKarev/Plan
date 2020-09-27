@@ -52,7 +52,7 @@ class PlanReformatter:
         self.df = dataframe
         self.magic_rows = magic_rows
         self.r_df = self.df.apply(lambda row: self.get_series_with_dates(row), axis=1)
-        self.get_df_for_gantt()
+        #self.get_df_for_gantt()
 
     def get_series_with_dates(self, row):
 
@@ -85,7 +85,7 @@ class PlanReformatter:
         ser = ser.rename(dic)
         return ser.append(pd.Series(row[-2:]))
 
-    def get_df_for_gantt(self, num=10, lag=None, begin=None, end=None):
+    def get_df_for_gantt(self, num=10000, lag=None, begin=None, end=None):
         self.gant_df = pd.DataFrame()
 
         #TODO create get num-lag function
@@ -98,14 +98,23 @@ class PlanReformatter:
             i = 0
             while i < len(ser) - 2:
                 if type(ser[i]) == dt:
-                    self.gant_df = self.gant_df.append(pd.DataFrame([dict(Task=ser.index[i][:-4],
+                    self.gant_df = self.gant_df.append(pd.DataFrame(
+                                                        [dict(Task=ser.index[i][:-4],
                                                         Start=ser[i] + timedelta(hours=8, minutes=20),
                                                         Finish=ser[i+1] + timedelta(hours=16, minutes=20),
-                                                        zakaz=str(ser.name) if type(ser.name)==int else str(ser.name[:4]))]),
+                                                        zakaz=str(ser.name) if type(ser.name)==int else str(ser.name[:4]),
+                                                        Hours=pu.get_working_hours_from_timerange(ser[i], ser[i+1], ser.name, ser.index[i][:-4])
+                                                        )]),
                                                         ignore_index=True)
                     i+=1
                 i+=1
         return self.gant_df
+
+    def get_df_timedelta_hours(self):
+        self.tdh = self.gant_df.copy()
+        self.tdh['Hours'] = list((self.gant_df['Finish'] - self.gant_df['Start']).dt.total_seconds()//(60*60))
+        return self.tdh
+        
 
     def get_jobs_names(self, reverse=False):
         i=0

@@ -2,8 +2,9 @@ import plotly.graph_objects as go
 from gantt_bar import *
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
-from datetime import timedelta
+from datetime import timedelta, date
 import holidays
+from model import plan_var as V
 
 class ViewManager:
     def __init__(self, jobs_names, exclude_jobs, hight=600,):
@@ -27,7 +28,7 @@ class ViewManager:
                 ind = column_names.index(i['Task'])
                 #print(ind)
                 self.fig.add_trace(self.bar.get_bar(i['Start'], i['Finish'],
-                                ind, i['Task'], group=int(i['zakaz'])))
+                                ind, i['Task'], group=int(i['zakaz']), working_hour=i['Hours']))
         except Exception as e:
             print('exeption', e)
 
@@ -85,21 +86,15 @@ class ViewManager:
             'layer' : "below",
         }
 
-        d = dt.today() - relativedelta(days=14)
+        d = dt.today() - relativedelta(days=45)
         d = d.replace(hour=0,minute=0,second=0, microsecond=0)
 
-        for i in range(124):
-            if d.weekday() == 5:
-                dct = b_dct.copy()
-                dct['x0'] =  d
-                dct['x1'] = d + relativedelta(days=2)
-                shapes.append(dct)
-            elif d in ru_holiday:
+        for i in range(154):
+            if date(d.year, d.month, d.day) in V.get_not_working_days():
                 dct = b_dct.copy()
                 dct['x0'] =  d
                 dct['x1'] = d + relativedelta(days=1)
                 shapes.append(dct)
-
             d = d + relativedelta(days=1)
 
         return shapes
