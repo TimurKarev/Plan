@@ -11,22 +11,32 @@ class Task:
     DUR_USUAL = 8
     DUR_OVER = 10
     
-    def __init__(self):
-        self.order : int
-        self.name : str
-        self.comment : str
-        
-        self.start : dt
-        self.end : dt
-        self.duration : dd
+    def __init__(self, order=None, name=None, start=None, end=None, duration=None,
+                comment=None, overjob = False, mercenary = False):
 
-        self.overjob : bool
-        self.mercenary : bool
-        
+        self.order : int = order
+        self.name : str = name
+        self.comment : str = comment
+
+        self.start : dt = start
+        self.end : dt = end
+        self.duration : dd = duration
+
+        self.overjob : bool = overjob
+        self.mercenary : bool = mercenary
+
         self.predecessors : list  #предшественники
         self.followers : list #последователи
 
 
+    def __str__(self):
+        return self.name
+    
+    
+    def __repr__(self):
+        return self.__str__()
+
+'''
     def set_end_by_start(self,
                         duration = None,
                         start = None,
@@ -51,3 +61,4 @@ class Task:
         cur_time = self.start
         day_dur = DUR_USUAL if self.overjob is False else DUR_OVER
         while cur_dur <= self.__get
+'''
