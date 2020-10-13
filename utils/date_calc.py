@@ -10,7 +10,7 @@ class DateCalc:
     work_over = 2
     fri_over = 3
     hol_over = 8
-    ru_hol = holidays.RU()
+    ru_hol = holidays.RU() #TODO сделать более широкую функцию выхи + праздники
 
     @staticmethod
     def add_hour(start : datetime, hour : tuple, 
@@ -20,15 +20,11 @@ class DateCalc:
         pass
 
 
-def is_working_time(cur_date : datetime,
-                work_over : bool = False,
-                sat_over : bool = False, sun_over : bool = False,
-                hol_over : bool = False) -> bool:
-
-    #date_day = cur_date.replace(hour=0, minute=0, second=0, microsecond=0)
-
-    fin_time : tuple = (17,20) # конец рабочего дня
-
+def is_working_day(cur_date: datetime,
+                    sat_over : bool = False,
+                    sun_over : bool = False,
+                    hol_over : bool = False) -> bool:
+    
     if (cur_date in DateCalc.ru_hol) and (hol_over is False):
         return False
 
@@ -37,6 +33,20 @@ def is_working_time(cur_date : datetime,
 
     if (cur_date.weekday() == 6) and (sun_over is False):
         return False
+    
+    return True
+
+
+def is_working_time(cur_date : datetime,
+                work_over : bool = False,
+                sat_over : bool = False, sun_over : bool = False,
+                hol_over : bool = False) -> bool:
+
+    if is_working_day(cur_date, sat_over, sun_over, hol_over) is False:
+        return False
+
+    fin_time : tuple = (17,20) # конец рабочего дня
+
 
     if (cur_date.weekday()  == 4):
         if (work_over is False):

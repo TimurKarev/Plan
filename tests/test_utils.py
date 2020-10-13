@@ -146,7 +146,7 @@ class TestIsWorkingTime(unittest.TestCase):
                                                                 sat_over = True,
                                                                 sun_over = True))
 
-    def test_friday(self):
+    def test_workday(self):
         #нерабочее время утро
         self.assertFalse(dc.is_working_time(cur_date = datetime(year=2020, month=10, day=1,
                                                                 hour=7)))
@@ -192,3 +192,18 @@ class TestIsWorkingTime(unittest.TestCase):
                                                                 hol_over = True,
                                                                 sat_over = True,
                                                                 sun_over = True))
+
+class TestIsWorkingDay(unittest.TestCase):
+    def test_hole_func(self):
+        # рабочий день
+        self.assertTrue(dc.is_working_day(datetime(2020,10,13)))
+        
+        # суббота
+        self.assertFalse(dc.is_working_day(datetime(2020,10,10), sat_over=False, sun_over=True, hol_over=True))
+        self.assertTrue(dc.is_working_day(datetime(2020,10,10), sat_over=True))
+        
+        self.assertFalse(dc.is_working_day(datetime(2020,10,11), sat_over=True, sun_over=False, hol_over=True))
+        self.assertTrue(dc.is_working_day(datetime(2020,10,11), sun_over=True))
+        
+        self.assertFalse(dc.is_working_day(datetime(2020,11,4), sat_over=True, sun_over=True, hol_over=False))
+        self.assertTrue(dc.is_working_day(datetime(2020,11,4), hol_over=True))
