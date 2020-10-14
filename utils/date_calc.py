@@ -11,6 +11,8 @@ class DateCalc:
     fri_over = 3
     hol_over = 8
     ru_hol = holidays.RU() #TODO сделать более широкую функцию выхи + праздники
+    dinner_beg = (11,30)
+    dinner_end = (12,18)
 
     @staticmethod
     def move_time(start : datetime, time : tuple, reverse = False, 
@@ -28,9 +30,9 @@ class DateCalc:
         while True:
 
             if reverse is False:
-                day_time_rest = (get_end_of_workday(cur_time, work_over) - cur_time).total_seconds()
+                day_time_rest = get_day_time_rest(cur_time, reverse, work_over)
             else:
-                day_time_rest = (cur_time - cur_time.replace(hour=8, minute=20, second=0, microsecond=0)).total_seconds()
+                day_time_rest = get_day_time_rest(cur_time, reverse, work_over)
         
             if day_time_rest > time_sec:
                 break
@@ -38,14 +40,14 @@ class DateCalc:
             cur_time = get_next_workday(cur_time, False, work_over, sat_over, sun_over, hol_over)
             time_sec -= day_time_rest
         
-        k = 1 if reverse is False else -1
+        #k = 1 if reverse is False else -1
         
-        return cur_time + timedelta(seconds = time_sec) * k
+        return add_time_intraday(cur_time, time_sec, reverse)
 
 
     @staticmethod
     def is_bigger(f_date : datetime = None, s_date : datetime = None,
-                f_time : tuple = None, s_time : tuple = None):
+                    f_time : tuple = None, s_time : tuple = None):
         
         ret = DateCalc.__format_time(f_date, s_date, f_time, s_time)
         if ret is None:
@@ -57,7 +59,26 @@ class DateCalc:
         if f_time[0] > s_time[0]:
             return True
         
-        if (f_time[0] == s_time[0]) and (f_time[1] > s_time[1]):
+        if (f_time[0] == s_time[0]) and (f_time[1] >= s_time[1]):
+            return True
+        
+        return False
+
+    @staticmethod
+    def is_smaller(f_date : datetime = None, s_date : datetime = None,
+                    f_time : tuple = None, s_time : tuple = None):
+        
+        ret = DateCalc.__format_time(f_date, s_date, f_time, s_time)
+        if ret is None:
+            return None
+        
+        f_time = ret[0]
+        s_time = ret[1]
+        
+        if f_time[0] < s_time[0]:
+            return True
+        
+        if (f_time[0] == s_time[0]) and (f_time[1] <= s_time[1]):
             return True
         
         return False
@@ -76,18 +97,31 @@ class DateCalc:
             return None
 
         if f_date is not None:
-            f_time = (-1, -1)
-            f_time[0] = f_date.hour
-            f_time[1] = f_date.minute
+            f_time = (f_date.hour, f_date.minute)
 
         if s_date is not None:
-            s_time = (-1, -1)
-            s_time[0] = s_date.hour
-            s_time[1] = s_date.minute
+            s_time = (s_date.hour, s_date.minute)
     
         return (f_time, s_time)
 
+# TODO Придумать как быть, потому что может перевалить за день (как вариант вызвать еще раз def move_time)
+def add_time_intraday(cur_time, sec, reverse = False):
+    pass
 
+
+# Возвращает остаток рабочего дня
+def get_day_time_rest(cur_time, reverse = False, work_over = False):
+    day_time_rest = None
+    if reverse is False:
+        day_time_rest = (get_end_of_workday(cur_time, work_over) - cur_time).total_seconds()
+        if DateCalc.is_smaller(f_date=cur_time, s_time= DateCalc.dinner_beg):
+            day_time_rest -= 48 * 60
+    else:
+        day_time_rest = (cur_time - cur_time.replace(hour=8, minute=20, second=0, microsecond=0)).total_seconds()
+        if DateCalc.is_bigger(f_date=cur_time, s_time= DateCalc.dinner_end):
+            day_time_rest -= 48 * 60
+
+    return day_time_rest
 
 
 def is_working_day(cur_date: datetime,

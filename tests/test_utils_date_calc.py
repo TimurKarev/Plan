@@ -340,8 +340,30 @@ class TestEqualsMethods(unittest.TestCase):
                                                 s_date = d.replace(hour=13, minute=30)))
         self.assertTrue(dc.DateCalc.is_bigger(f_date = d.replace(hour=13, minute=37), 
                                                 s_date = d.replace(hour=13, minute=35)))
+        self.assertTrue(dc.DateCalc.is_bigger(f_date = d.replace(hour=13, minute=37), 
+                                                s_time = (13,35)))
+        self.assertFalse(dc.DateCalc.is_bigger(f_date = d.replace(hour=13, minute=30), 
+                                                s_time = (13,35)))
 
-        
+    def test_is_smaller(self):
+        self.assertEqual(None, dc.DateCalc.is_smaller())
+        self.assertEqual(None, dc.DateCalc.is_smaller(s_date = datetime.now(), s_time=(12,30)))
+        self.assertEqual(None, dc.DateCalc.is_bigger(f_date = datetime.now(), f_time=(12,30)))
+        d = datetime.now()
+        self.assertTrue(dc.DateCalc.is_smaller(f_date = d.replace(hour=12, minute=30), 
+                                                s_date = d.replace(hour=13, minute=30)))
+        self.assertTrue(dc.DateCalc.is_smaller(f_date = d.replace(hour=13, minute=30), 
+                                                s_date = d.replace(hour=13, minute=35)))
+        self.assertFalse(dc.DateCalc.is_smaller(f_date = d.replace(hour=14, minute=30), 
+                                                s_date = d.replace(hour=13, minute=30)))
+        self.assertFalse(dc.DateCalc.is_smaller(f_date = d.replace(hour=13, minute=37), 
+                                                s_date = d.replace(hour=13, minute=35)))
+        self.assertFalse(dc.DateCalc.is_smaller(f_date = d.replace(hour=13, minute=37), 
+                                                s_time = (13,35)))
+        self.assertTrue(dc.DateCalc.is_smaller(f_date = d.replace(hour=13, minute=30), 
+                                                s_time = (13,35)))
+
+
 class TestMoveTime(unittest.TestCase):
     def test_intraday_(self):
         # рабочий день без переработок
