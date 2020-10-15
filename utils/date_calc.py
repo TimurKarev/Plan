@@ -106,7 +106,15 @@ class DateCalc:
 
 # TODO Придумать как быть, потому что может перевалить за день (как вариант вызвать еще раз def move_time)
 def add_time_intraday(cur_time, sec, reverse = False):
-    pass
+    k = 1 if reverse is False else -1
+    dinner_sec = 0
+    if (reverse and DateCalc.is_bigger(f_date = cur_time, s_time = DateCalc.dinner_end)) \
+        or (not reverse and DateCalc.is_smaller(f_date = cur_time, s_time = DateCalc.dinner_beg)):
+            dinner_sec = 40 * 60
+    #TODO исправить ошибку нет учета k при обратном подсчете
+    t = (cur_time + timedelta(seconds=sec) * k).total_seconds() + dinner_sec
+    return t
+    
 
 
 # Возвращает остаток рабочего дня

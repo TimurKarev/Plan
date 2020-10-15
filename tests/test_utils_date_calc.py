@@ -393,3 +393,66 @@ class TestMoveTime(unittest.TestCase):
         answer = datetime(2020, 10, 6, 10, 20)
         d = dc.DateCalc.move_time(d, (10,0), reverse = False, work_over = False, hol_over = True, sun_over = True, sat_over = True)
         self.assertEqual(answer, d)
+
+class TestGetTimeRest(unittest.TestCase):
+    def test_hole_func(self):
+        # Прямой после обеда не переработок
+        d = datetime(2020, 10, 1, 13, 0)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = False)
+        answer = 15600
+        self.assertEqual(answer, d)
+        # Прямой до обеда переработка
+        d = datetime(2020, 10, 1, 13, 0)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = True)
+        answer = 22800
+        self.assertEqual(answer, d)
+        # Прямой до обеда не переработок
+        d = datetime(2020, 10, 1, 10, 20)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = False)
+        answer = 22320
+        self.assertEqual(answer, d)
+        # Прямой до обеда переработок
+        d = datetime(2020, 10, 1, 10, 20)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = True)
+        answer = 29520
+        self.assertEqual(answer, d)
+        # Прямой пятница после обеда не переработок
+        d = datetime(2020, 10, 2, 15, 20)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = False)
+        answer = 3600
+        self.assertEqual(answer, d)
+        # Прямой пятница после обеда переработка
+        d = datetime(2020, 10, 2, 15, 20)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = True)
+        answer = 14400
+        self.assertEqual(answer, d)
+        # Прямой пятница до обеда не переработок
+        d = datetime(2020, 10, 2, 10, 20)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = False)
+        answer = 18720
+        self.assertEqual(answer, d)
+        # Прямой пятница до обеда переработок
+        d = datetime(2020, 10, 2, 10, 20)
+        d = dc.get_day_time_rest(d, reverse = False, work_over = True)
+        answer = 29520
+        self.assertEqual(answer, d)
+
+        # Обратный до обеда не переработок
+        d = datetime(2020, 10, 1, 10, 20)
+        d = dc.get_day_time_rest(d, reverse = True, work_over = False)
+        answer = 7200
+        self.assertEqual(answer, d)
+        # Обратный после обеда переработка
+        d = datetime(2020, 10, 1, 15, 20)
+        d = dc.get_day_time_rest(d, reverse = True, work_over = False)
+        answer = 22320
+        self.assertEqual(answer, d)
+        # Обратный пятница до обеда переработока
+        d = datetime(2020, 10, 2, 10, 20)
+        d = dc.get_day_time_rest(d, reverse = True, work_over = False)
+        answer = 7200
+        # Обратный пятница после обеда не переработока
+        d = datetime(2020, 10, 2, 15, 20)
+        d = dc.get_day_time_rest(d, reverse = True, work_over = False)
+        answer = 22320
+        self.assertEqual(answer, d)
