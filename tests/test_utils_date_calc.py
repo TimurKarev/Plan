@@ -364,35 +364,6 @@ class TestEqualsMethods(unittest.TestCase):
                                                 s_time = (13,35)))
 
 
-class TestMoveTime(unittest.TestCase):
-    def test_intraday_(self):
-        # рабочий день без переработок
-        d = datetime(2020, 10, 5, 12, 0)
-        answer = datetime(2020, 10, 5, 13, 20)
-        d = dc.DateCalc.move_time(d, (1,20), reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
-        self.assertEqual(answer, d)
-        # рабочий день переработка
-        d = datetime(2020, 10, 5, 12, 0)
-        answer = datetime(2020, 10, 5, 18, 20)
-        d = dc.DateCalc.move_time(d, (6,20), reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
-        self.assertEqual(answer, d)
-        # рабочий  обратн день без переработок
-        d =      datetime(2020, 10, 5, 12, 0)
-        answer = datetime(2020, 10, 5, 11, 20)
-        d = dc.DateCalc.move_time(d, (0,40), reverse = True, work_over = True, hol_over = True, sun_over = True, sat_over = True)
-        self.assertEqual(answer, d)
-        # рабочий  обратн день c переработок
-        d =      datetime(2020, 10, 5, 19, 0)
-        answer = datetime(2020, 10, 5, 13, 20)
-        d = dc.DateCalc.move_time(d, (5,40), reverse = True, work_over = True, hol_over = True, sun_over = True, sat_over = True)
-        self.assertEqual(answer, d)
-
-    def test_overday_forwards(self):
-        # (рабочий день - рабочий день)  без переработок
-        d = datetime(2020, 10, 5, 8, 20)
-        answer = datetime(2020, 10, 6, 10, 20)
-        d = dc.DateCalc.move_time(d, (10,0), reverse = False, work_over = False, hol_over = True, sun_over = True, sat_over = True)
-        self.assertEqual(answer, d)
 
 class TestGetTimeRest(unittest.TestCase):
     def test_hole_func(self):
@@ -455,4 +426,112 @@ class TestGetTimeRest(unittest.TestCase):
         d = datetime(2020, 10, 2, 15, 20)
         d = dc.get_day_time_rest(d, reverse = True, work_over = False)
         answer = 22320
+        self.assertEqual(answer, d)
+
+class TestAddIntradays(unittest.TestCase):
+    def test_hole_func(self):
+        #No dinner forward
+        d = datetime(2020, 10, 1, 10, 0)
+        a = dc.add_time_intraday(d, 3600, False)
+        b = datetime(2020, 10, 1, 11, 0)
+        self.assertEqual(a,b)
+
+        #No dinner reverse
+        d = datetime(2020, 10, 1, 10, 0)
+        a = dc.add_time_intraday(d, 3600, True)
+        b = datetime(2020, 10, 1, 9, 0)
+        self.assertEqual(a,b)
+
+        #Dinner forward outside
+        d = datetime(2020, 10, 1, 10, 0)
+        a = dc.add_time_intraday(d, 2*3600, False)
+        b = datetime(2020, 10, 1, 12, 48)
+        self.assertEqual(a,b)
+
+        #Dinner reverse outside
+        d = datetime(2020, 10, 1, 13, 0)
+        a = dc.add_time_intraday(d, 3*3600, True)
+        b = datetime(2020, 10, 1, 9, 12)
+        self.assertEqual(a,b)
+
+        #Dinner forward outside
+        d = datetime(2020, 10, 1, 12, 0)
+        a = dc.add_time_intraday(d, 1*3600, False)
+        b = datetime(2020, 10, 1, 13, 48)
+        self.assertEqual(a,b)
+
+        #Dinner reverse outside
+        d = datetime(2020, 10, 1, 12, 0)
+        a = dc.add_time_intraday(d, 1*3600, True)
+        b = datetime(2020, 10, 1, 10, 12)
+        self.assertEqual(a,b)
+
+class TestMoveTime(unittest.TestCase):
+    def test_intraday_(self):
+        # рабочий день без переработок
+        d = datetime(2020, 10, 5, 12, 0)
+        d = dc.DateCalc.move_time(d, (1,20), reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 5, 14, 8)
+        self.assertEqual(answer, d)
+        # рабочий день переработка
+        d = datetime(2020, 10, 5, 12, 0)
+        d = dc.DateCalc.move_time(d, (6,20), reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 5, 19, 8)
+        self.assertEqual(answer, d)
+
+        # рабочий  обратн день без переработок
+        d =      datetime(2020, 10, 5, 12, 0)
+        d = dc.DateCalc.move_time(d, (0,40), reverse = True, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 5, 10, 32)
+        self.assertEqual(answer, d)
+        
+        # рабочий  обратн день c переработок
+        d =      datetime(2020, 10, 5, 19, 0)
+        d = dc.DateCalc.move_time(d, (5,40), reverse = True, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 5, 13, 20)
+        self.assertEqual(answer, d)
+
+    def test_overday_one_day_forwards(self):
+        # (рабочий день - рабочий день)  без переработок
+        d = datetime(2020, 10, 5, 8, 20)
+        d = dc.DateCalc.move_time(d, (10,0), reverse = False, work_over = False, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 6, 10, 8)
+        self.assertEqual(answer, d)
+
+        # (рабочий день - рабочий день)  без переработок задача на полный день
+        d = datetime(2020, 10, 5, 8, 20)
+        d = dc.DateCalc.move_time(d, (8,12), reverse = False, work_over = False, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 5, 17, 20)
+        self.assertEqual(answer, d)
+
+        # (рабочий день - рабочий день)  переработока
+        d = datetime(2020, 10, 5, 8, 20)
+        d = dc.DateCalc.move_time(d, (14,0), reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 6, 12, 56)
+        self.assertEqual(answer, d)
+
+        # обратн (рабочий день - рабочий день)  без переработок
+        d = datetime(2020, 10, 6, 10, 8)
+        d = dc.DateCalc.move_time(d, (10,0), reverse = True, work_over = False, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 5, 8, 20)
+        self.assertEqual(answer, d)
+
+        # (рабочий день - рабочий день)  переработока
+        d = datetime(2020, 10, 5, 8, 20)
+        d = dc.DateCalc.move_time(d, (14,0), reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 6, 12, 56)
+        self.assertEqual(answer, d)
+
+        # обратн (рабочий день - выходные)  без переработок
+        d = datetime(2020, 10, 6, 10, 8)
+        d = dc.DateCalc.move_time(d, (11,0), reverse = True, work_over = False,
+                                hol_over = True, sun_over = False, sat_over = False)
+        answer = datetime(2020, 10, 2, 15, 20)
+        self.assertEqual(answer, d)
+
+        # обратн (рабочий день - выходные)  вс раб
+        d = datetime(2020, 10, 6, 10, 8)
+        d = dc.DateCalc.move_time(d, (11,0), reverse = True, work_over = False,
+                                hol_over = True, sun_over = True, sat_over = True)
+        answer = datetime(2020, 10, 4, 16, 20)
         self.assertEqual(answer, d)

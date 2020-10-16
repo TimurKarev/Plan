@@ -1,22 +1,10 @@
 from plan_model.task import Task
 
 class Order:
-    def __init__(self, df, num_order):
-        self.name = num_order
+    def __init__(self):
+        self.name = None
         self.tasks = []
-        self.order_df = df[df.zakaz==num_order]
-
-        for _, row in self.order_df.iterrows():
-            t = Task(
-                    order=row.zakaz,
-                    name=row.Task,
-                    start=row.Start,
-                    end=row.Finish,
-                    duration=row.Hours,
-                )
-            self.tasks.append(t)
-        
-        self.set_dependence('ЗаливкаНМ', '')
+        self.order_df = None
 
     def get_task_by_name(self, name):
         task = None

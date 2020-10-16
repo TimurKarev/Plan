@@ -34,10 +34,10 @@ class DateCalc:
             else:
                 day_time_rest = get_day_time_rest(cur_time, reverse, work_over)
         
-            if day_time_rest > time_sec:
+            if day_time_rest >= time_sec:
                 break
             
-            cur_time = get_next_workday(cur_time, False, work_over, sat_over, sun_over, hol_over)
+            cur_time = get_next_workday(cur_time, reverse, work_over, sat_over, sun_over, hol_over)
             time_sec -= day_time_rest
         
         #k = 1 if reverse is False else -1
@@ -106,13 +106,29 @@ class DateCalc:
 
 # TODO Придумать как быть, потому что может перевалить за день (как вариант вызвать еще раз def move_time)
 def add_time_intraday(cur_time, sec, reverse = False):
+    
     k = 1 if reverse is False else -1
-    dinner_sec = 0
-    if (reverse and DateCalc.is_bigger(f_date = cur_time, s_time = DateCalc.dinner_end)) \
-        or (not reverse and DateCalc.is_smaller(f_date = cur_time, s_time = DateCalc.dinner_beg)):
-            dinner_sec = 40 * 60
+    dinner_sec = 48 * 60
+    # if (reverse and DateCalc.is_bigger(f_date = cur_time, s_time = DateCalc.dinner_end)) \
+    #     or (not reverse and DateCalc.is_smaller(f_date = cur_time, s_time = DateCalc.dinner_beg)):
+    #         dinner_sec = 40 * 60
+    t = cur_time + timedelta(seconds=sec) * k
+
+    if DateCalc.is_smaller(f_date = cur_time, s_time = DateCalc.dinner_end) and \
+            DateCalc.is_bigger(f_date = cur_time, s_time = DateCalc.dinner_beg):
+        t = t + timedelta(seconds=dinner_sec) * k
+    else:
+        if reverse:
+            if DateCalc.is_bigger(f_date = cur_time, s_time = DateCalc.dinner_end) and \
+                DateCalc.is_smaller(f_date = t, s_time = DateCalc.dinner_end):
+                t = t - timedelta(seconds=dinner_sec)
+        else:
+            if DateCalc.is_smaller(f_date = cur_time, s_time = DateCalc.dinner_beg) and \
+                DateCalc.is_bigger(f_date = t, s_time = DateCalc.dinner_beg):
+                t = t + timedelta(seconds=dinner_sec)
+
     #TODO исправить ошибку нет учета k при обратном подсчете
-    t = (cur_time + timedelta(seconds=sec) * k).total_seconds() + dinner_sec
+    
     return t
     
 

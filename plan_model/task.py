@@ -25,9 +25,14 @@ class Task:
         self.overjob : bool = overjob
         self.mercenary : bool = mercenary
 
-        self.predecessors : list  #предшественники
-        self.followers : list #последователи
-
+        self.predecessors = []  #предшественники
+        self.followers = [] #последователи
+        
+        self.decomp_parent = [] #корневые задачи
+        self.decomp_child = [] #дочерние задачи
+        
+        self.time_before = None
+        self.time_after = None
 
     def __str__(self):
         return self.name
