@@ -1,0 +1,175 @@
+<?xml version="1.1"?>
+<tasks>
+    <task name="Заливка_НМ">
+
+        <duration days="3" hours="0" minutes="0"></duration>
+
+        <follower fol = "Отделка_НМ"></follower>
+    </task>
+
+    <task name="Отделка_НМ">
+
+        <duration days="2" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Заливка_НМ"></predecessor>
+
+        <follower fol = "Навеска_НМ"></follower>
+    </task>
+
+    <task name="Передача_заказчику">
+
+        <duration days="1" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Навеска_НМ"></predecessor>
+        <predecessor pred = "Комплектация"></predecessor>
+
+        <follower fol = "Отгрузка"></follower>
+    </task>
+    
+    <task name="Заливка_ВМ">
+
+        <duration days="4" hours="0" minutes="0"></duration>
+
+        <follower fol = "Отделка_перв_ВМ"></follower>
+    </task>
+
+    <task name="Отделка_перв_ВМ">
+
+        <duration days="3" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Заливка_ВМ"></predecessor>
+
+        <follower fol = "Навеска_ВМ"></follower>
+    </task>
+
+    <task name="Навеска_ВМ">
+
+        <duration days="0" hours="20" minutes="0"></duration>
+
+        <predecessor pred = "Отделка_перв_ВМ"></predecessor>
+
+        <follower fol = "Заливка_ВМ"></follower>
+    </task>
+
+    <task name="Собственные_нужды">
+
+        <duration days="1" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Отделка_перв_ВМ"></predecessor>
+        <predecessor pred = "Поставка_оборуд_СН"></predecessor>
+
+        <follower fol = "Установка_РУНН_РУВН"></follower>
+    </task>
+
+    <task name="Сборка_щитов">
+
+        <duration days="0" hours="24" minutes="0"></duration>
+
+        <follower fol = "Собственные_нужды"></follower>
+    </task>
+
+    <task name="Установка_РУНН_РУВН">
+
+        <duration days="0" hours="16" minutes="0"></duration>
+
+        <predecessor pred = "Собственные_нужды"></predecessor>
+        <predecessor pred = "Силовая_сборка_УВР"></predecessor>
+
+        <follower fol = "Установка_шинного_моста"></follower>
+    </task>
+
+    <task name="Изготовление_шины_УВР">
+
+        <duration days="0" hours="24" minutes="0"></duration>
+
+        <follower fol = "Силовая_сборка_УВР"></follower>
+    </task>
+
+    <task name="Силовая_сборка_УВР">
+
+        <duration days="0" hours="40" minutes="0"></duration>
+
+        <predecessor pred = "Изготовление_шины_УВР"></predecessor>
+
+        <follower fol = "Установка_РУНН_РУВН"></follower>
+    </task>
+
+    <task name="Изготовление_шинного_моста">
+
+        <duration days="0" hours="12" minutes="0"></duration>
+
+        <follower fol = "Установка_шинного_моста"></follower>
+    </task>
+
+    <task name="Установка_шинного_моста">
+
+        <duration days="0" hours="8" minutes="0"></duration>
+
+        <predecessor pred = "Изготовление_шинного_моста"></predecessor>
+        <predecessor pred = "Установка_РУНН_РУВН"></predecessor>
+
+        <follower fol = "Сборка_вторичных_соединений"></follower>
+    </task>
+
+    <task name="Изготовление_кабельных_перемычек">
+
+        <duration days="0" hours="32" minutes="0"></duration>
+
+        <follower fol = "Комплектация"></follower>
+    </task>
+
+    <task name="Сборка_вторичных_соединений">
+
+        <duration days="0" hours="46" minutes="0"></duration>
+
+        <predecessor pred = "Установка_шинного_моста"></predecessor>
+
+        <follower fol = "Наладка"></follower>
+    </task>
+
+    <task name="Наладка">
+
+        <duration days="1" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Сборка_вторичных_соединений"></predecessor>
+
+        <follower fol = "Пост_Наладка"></follower>
+    </task>
+
+    <task name="Пост_Наладка">
+
+        <duration days="0" hours="8" minutes="0"></duration>
+
+        <predecessor pred = "Наладка"></predecessor>
+
+        <follower fol = "Отделка_финиш_ВМ"></follower>
+    </task>
+
+    <task name="Отделка_финиш_ВМ">
+
+        <duration days="1" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Пост_Наладка"></predecessor>
+
+        <follower fol = "Комплектация"></follower>
+    </task>
+
+    <task name="Комплектация">
+
+        <duration days="0" hours="10" minutes="0"></duration>
+
+        <predecessor pred = "Отделка_финиш_ВМ"></predecessor>
+
+        <follower fol = "Передача_заказчику"></follower>
+    </task>
+
+    <task name="Отгрузка">
+
+        <duration days="1" hours="0" minutes="0"></duration>
+
+        <predecessor pred = "Передача_заказчику"></predecessor>
+
+    </task>
+
+
+</tasks>

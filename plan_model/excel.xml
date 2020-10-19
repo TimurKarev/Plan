@@ -1,21 +1,202 @@
 <task>
     <order></order>
-    <name>Навеска_ВМ</name>
+    <name>Заливка_НМ</name>
     <comment></comment>
     <start></start>
     <end></end>
-    <duration></duration>
+    <duration_days>3</duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
 
     <predecessors>
         <predecessor></predecessor>
     </predecessors>
 
     <followers>
+        <follower>Навеска_НМ</follower>
+    </followers>
+
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
+
+    <decomp_childs>
+        <decomp_child>Отделка_НМ</decomp_child>
+    </decomp_childs>
+</task>
+
+<task>
+    <order></order>
+    <name>Навеска_НМ</name>
+    <comment></comment>
+    <start></start>
+    <end></end>
+    <duration_days></duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
+
+    <predecessors>
+        <predecessor>Заливка_НМ</predecessor>
+    </predecessors>
+
+    <followers>
         <follower></follower>
     </followers>
 
-    
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
 
+    <decomp_childs>
+        <decomp_child></decomp_child>
+    </decomp_childs>
+</task>
 
+<task>
+    <order></order>
+    <name>Заливка_ВМ</name>
+    <comment></comment>
+    <start></start>
+    <end></end>
+    <duration_days></duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
 
+    <predecessors>
+        <predecessor></predecessor>
+    </predecessors>
+
+    <followers>
+        <follower>Навеска_ВМ</follower>
+    </followers>
+
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
+
+    <decomp_childs>
+        <decomp_child>Отделка_перв_ВМ</decomp_child>
+    </decomp_childs>
+</task>
+
+<task>
+    <order></order>
+    <name>Навеска_ВМ</name>
+    <comment></comment>
+    <start></start>
+    <end></end>
+    <duration_days></duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
+
+    <predecessors>
+        <predecessor>Заливка_ВМ</predecessor>
+    </predecessors>
+
+    <followers>
+        <follower>Монтаж_СН</follower>
+    </followers>
+
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
+
+    <decomp_childs>
+        <decomp_child></decomp_child>
+    </decomp_childs>
+</task>
+
+<task>
+    <order></order>
+    <name>Сборка_Щитов</name>
+    <comment></comment>
+    <start></start>
+    <end></end>
+    <duration_days></duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
+
+    <predecessors>
+        <predecessor></predecessor>
+    </predecessors>
+
+    <followers>
+        <follower>Монтаж_СН</follower>
+    </followers>
+
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
+
+    <decomp_childs>
+        <decomp_child>Сборка_ШСН</decomp_child>
+        <decomp_child>Сборка_ШЗС</decomp_child>
+        <decomp_child>Сборка_ШОС</decomp_child>
+        <decomp_child>Сборка_ШПД</decomp_child>
+        <decomp_child>Сборка_ШБПЗОС</decomp_child>
+        <decomp_child>Сборка_ШОЗС</decomp_child>
+        <decomp_child>Сборка_ШУАВР</decomp_child>
+        <decomp_child>Сборка_ШТЗ</decomp_child>
+        <decomp_child>Сборка_ШБП</decomp_child>
+    </decomp_childs>
+</task>
+
+<task>
+    <order></order>
+    <name>Монтаж_СН</name>
+    <comment></comment>
+    <start></start>
+    <end></end>
+    <duration_days></duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
+
+    <predecessors>
+        <predecessor>Навеска_ВМ</predecessor>
+        <predecessor>Сборка_Щитов</predecessor>
+    </predecessors>
+
+    <followers>
+        <follower>УсткаRM</follower>
+        <follower>УсткаВВ</follower>
+        <follower>УсткаНН</follower>
+    </followers>
+
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
+
+    <decomp_childs>
+        <decomp_child></decomp_child>
+    </decomp_childs>
+</task>
+
+<task>
+    <order></order>
+    <name>ШинаУВР</name>
+    <comment></comment>
+    <start></start>
+    <end></end>
+    <duration_days></duration_days>
+    <duration_hours></duration_hours>
+    <duration_minutes></duration_minutes>
+
+    <predecessors>
+        <predecessor>Навеска_ВМ</predecessor>
+        <predecessor>Сборка_Щитов</predecessor>
+    </predecessors>
+
+    <followers>
+        <follower>УсткаRM</follower>
+        <follower>УсткаВВ</follower>
+        <follower>УсткаНН</follower>
+    </followers>
+
+    <decomp_parents>
+        <decomp_parent></decomp_parent>
+    </decomp_parents>
+
+    <decomp_childs>
+        <decomp_child></decomp_child>
+    </decomp_childs>
 </task>
