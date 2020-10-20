@@ -258,72 +258,72 @@ class TestGetNextWorkDay(unittest.TestCase):
     #пятница без переработка
         d = datetime(2020, 10, 2)
         answer = datetime(2020, 10, 5, 8, 20, 0, 0)
-        d = dc.get_next_workday(d, work_over = True, hol_over = True)
+        d = dc.DateCalc.get_next_workday(d, work_over = True, hol_over = True)
         self.assertEqual(answer, d)
     #пятница переработка в субботу
         d = datetime(2020, 10, 2)
         answer = datetime(2020, 10, 3, 8, 20, 0, 0)
-        d = dc.get_next_workday(d, work_over = True, hol_over = True, sat_over = True, sun_over = True)
+        d = dc.DateCalc.get_next_workday(d, work_over = True, hol_over = True, sat_over = True, sun_over = True)
         self.assertEqual(answer, d)
     #пятница переработка в воскресенье
         d = datetime(2020, 10, 2)
         answer = datetime(2020, 10, 4, 8, 20, 0, 0)
-        d = dc.get_next_workday(d, work_over = True, hol_over = True, sun_over = True)
+        d = dc.DateCalc.get_next_workday(d, work_over = True, hol_over = True, sun_over = True)
         self.assertEqual(answer, d)
     #пятница обратн без переработка
         d = datetime(2020, 10, 2)
         answer = datetime(2020, 10, 1, 17, 20)
-        d = dc.get_next_workday(d, reverse=True, work_over = False, hol_over = True, sat_over = True, sun_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse=True, work_over = False, hol_over = True, sat_over = True, sun_over = True)
         self.assertEqual(answer, d)
     #пятница обратн переработка
         d = datetime(2020, 10, 2)
         answer = datetime(2020, 10, 1, 19, 20)
-        d = dc.get_next_workday(d, reverse=True, work_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse=True, work_over = True)
         self.assertEqual(answer, d)
     #пн переработка
         d = datetime(2020, 10, 5)
         answer = datetime(2020, 10, 6, 8, 20, 0, 0)
-        d = dc.get_next_workday(d, work_over = True)
+        d = dc.DateCalc.get_next_workday(d, work_over = True)
         self.assertEqual(answer, d)
     #пн обратн без переработка
         d = datetime(2020, 10, 5)
         answer = datetime(2020, 10, 2, 16, 20)
-        d = dc.get_next_workday(d, reverse = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = True)
         self.assertEqual(answer, d)
     #пн обратн переработка в рабочее время
         d = datetime(2020, 10, 5)
         answer = datetime(2020, 10, 2, 19, 20)
-        d = dc.get_next_workday(d, reverse = True, work_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = True, work_over = True)
         self.assertEqual(answer, d)
     #пн обратнт переработка в субботу
         d = datetime(2020, 10, 5)
         answer = datetime(2020, 10, 3, 17, 20)
-        d = dc.get_next_workday(d, reverse = True, work_over = True, hol_over = True, sun_over = False, sat_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = True, work_over = True, hol_over = True, sun_over = False, sat_over = True)
         self.assertEqual(answer, d)
     #пн обратн переработка в воскресенье
         d = datetime(2020, 10, 5)
         answer = datetime(2020, 10, 4, 17, 20)
-        d = dc.get_next_workday(d, reverse = True, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = True, work_over = True, hol_over = True, sun_over = True, sat_over = True)
         self.assertEqual(answer, d)
     #предпразн без переработка
         d = datetime(2020, 11, 3)
         answer = datetime(2020, 11, 5, 8, 20, 0, 0)
-        d = dc.get_next_workday(d, reverse = False, work_over = True, hol_over = False, sun_over = True, sat_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = False, work_over = True, hol_over = False, sun_over = True, sat_over = True)
         self.assertEqual(answer, d)
     #предпразн переработка
         d = datetime(2020, 11, 3)
         answer = datetime(2020, 11, 4, 8, 20, 0, 0)
-        d = dc.get_next_workday(d, reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = False, work_over = True, hol_over = True, sun_over = True, sat_over = True)
         self.assertEqual(answer, d)
     #постпразн обратн без переработка
         d = datetime(2020, 11, 5)
         answer = datetime(2020, 11, 3, 17, 20)
-        d = dc.get_next_workday(d, reverse = True, sun_over = True, sat_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = True, sun_over = True, sat_over = True)
         self.assertEqual(answer, d)
     #постпразн обратн переработка
         d = datetime(2020, 11, 5)
         answer = datetime(2020, 11, 4, 17, 20)
-        d = dc.get_next_workday(d, reverse = True, sun_over = True, sat_over = True, hol_over = True)
+        d = dc.DateCalc.get_next_workday(d, reverse = True, sun_over = True, sat_over = True, hol_over = True)
         self.assertEqual(answer, d)
 
 class TestEqualsMethods(unittest.TestCase):

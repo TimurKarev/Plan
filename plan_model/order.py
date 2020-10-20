@@ -2,7 +2,7 @@ from plan_model.task import Task
 
 class Order:
     def __init__(self):
-        self.name = None
+        self.order_name = None
         self.tasks = []
         self.order_df = None
 
@@ -32,4 +32,7 @@ class Order:
         return True
 
     def __str__(self):
-        return str(self.name) + ' ' + str(len(self.tasks)) + ' -tasks'
+        return str(self.order_name) + ' ' + str(len(self.tasks)) + ' -tasks'
+    
+    def __repr__(self):
+        return self.__str__()

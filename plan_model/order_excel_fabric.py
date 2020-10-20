@@ -2,7 +2,7 @@ from plan_model.order import Order
 from plan_model.task import Task
 
 class OrderExcelFabric:
-    def create_order(self, df, num_order, type):
+    def create_order(self, num_order, df = None, type = None):
         self.order = Order()
         self.order.order_df =  df[df.zakaz==num_order]
 

@@ -7,13 +7,29 @@
 
         <follower fol = "Заливка_НМ"></follower>
         <follower fol = "Заливка_ВМ"></follower>
+        <follower fol = "Сборка_щитов"></follower>
+        <follower fol = "Изготовление_шины_УВР"></follower>
+        <follower fol = "Изготовление_шинного_моста"></follower>
+        <follower fol = "Изготовление_кабельных_перемычек"></follower>
+
     </task>
 
     <task name="Заливка_НМ">
 
         <duration days="3" hours="0" minutes="0"></duration>
 
+        <predecessor pred = "Начало"></predecessor>
+
         <follower fol = "Отделка_НМ"></follower>
+    </task>
+
+    <task name="Навеска_НМ">
+
+        <duration days="0" hours="6" minutes="0"></duration>
+
+        <predecessor pred = "Отделка_НМ"></predecessor>
+
+        <follower fol = "Передача_заказчику"></follower>
     </task>
 
     <task name="Отделка_НМ">
@@ -39,6 +55,8 @@
 
         <duration days="4" hours="0" minutes="0"></duration>
 
+        <predecessor pred = "Начало"></predecessor>
+
         <follower fol = "Отделка_перв_ВМ"></follower>
     </task>
 
@@ -57,12 +75,12 @@
 
         <predecessor pred = "Отделка_перв_ВМ"></predecessor>
 
-        <follower fol = "Заливка_ВМ"></follower>
+        <follower fol = "Собственные_нужды"></follower>
     </task>
 
     <task name="Собственные_нужды">
 
-        <duration days="1" hours="0" minutes="0"></duration>
+        <duration days="0" hours="8" minutes="0"></duration>
 
         <predecessor pred = "Отделка_перв_ВМ"></predecessor>
         <predecessor pred = "Поставка_оборуд_СН"></predecessor>
@@ -74,12 +92,14 @@
 
         <duration days="0" hours="24" minutes="0"></duration>
 
+        <predecessor pred = "Начало"></predecessor>
+
         <follower fol = "Собственные_нужды"></follower>
     </task>
 
     <task name="Установка_РУНН_РУВН">
 
-        <duration days="0" hours="16" minutes="0"></duration>
+        <duration days="0" hours="4" minutes="0"></duration>
 
         <predecessor pred = "Собственные_нужды"></predecessor>
         <predecessor pred = "Силовая_сборка_УВР"></predecessor>
@@ -89,14 +109,16 @@
 
     <task name="Изготовление_шины_УВР">
 
-        <duration days="0" hours="24" minutes="0"></duration>
+        <duration days="0" hours="12" minutes="0"></duration>
+
+        <predecessor pred = "Начало"></predecessor>
 
         <follower fol = "Силовая_сборка_УВР"></follower>
     </task>
 
     <task name="Силовая_сборка_УВР">
 
-        <duration days="0" hours="40" minutes="0"></duration>
+        <duration days="0" hours="20" minutes="0"></duration>
 
         <predecessor pred = "Изготовление_шины_УВР"></predecessor>
 
@@ -106,6 +128,8 @@
     <task name="Изготовление_шинного_моста">
 
         <duration days="0" hours="12" minutes="0"></duration>
+
+        <predecessor pred = "Начало"></predecessor>
 
         <follower fol = "Установка_шинного_моста"></follower>
     </task>
@@ -123,6 +147,8 @@
     <task name="Изготовление_кабельных_перемычек">
 
         <duration days="0" hours="32" minutes="0"></duration>
+
+        <predecessor pred = "Начало"></predecessor>
 
         <follower fol = "Комплектация"></follower>
     </task>

@@ -1,7 +1,6 @@
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta as dd
 
-
 class Task:
     
     PR_MV = 0
@@ -20,7 +19,8 @@ class Task:
 
         self.start : dt = start
         self.end : dt = end
-        self.duration : dd = duration
+
+        self.duration = duration
 
         self.overjob : bool = overjob
         self.mercenary : bool = mercenary
@@ -35,7 +35,14 @@ class Task:
         self.time_after = None
 
     def __str__(self):
-        return self.name
+        rs =    'Name - ' + str(self.name)
+        rs += '\nDur  - ' + str(self.duration)
+        pred = [p.name for p in self.predecessors]
+        rs += '\nPre  - ' + str(pred)
+        fol = [f.name for f in self.followers]
+        rs += '\nFol  - ' + str(fol)
+
+        return rs
     
     
     def __repr__(self):

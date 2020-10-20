@@ -15,6 +15,26 @@ class DateCalc:
     dinner_end = (12,18)
 
     @staticmethod
+    def get_next_workday(cur_date : datetime, reverse = False, 
+                        work_over = False, sat_over = False,
+                        sun_over = False, hol_over = False) -> datetime:
+
+        k = 1 if reverse is False else -1
+        
+        c = cur_date + timedelta(days=1) * k
+        while not is_working_day(c, sat_over = sat_over, sun_over = sun_over, hol_over = hol_over):
+            c = c + k * timedelta(days=1)
+        
+        pass
+        if reverse is False:
+            c = c.replace(hour=DateCalc.work_beg[0], minute=DateCalc.work_beg[1], second=0, microsecond=0)
+        else:
+            c = get_end_of_workday(c, work_over)  #TODO сделать функцию с упором на производственный календарь, через функцию
+        
+        return c
+
+
+    @staticmethod
     def move_time(start : datetime, time : tuple, reverse = False, 
                 work_over : bool = False,
                 sat_over : bool = False, sun_over : bool = False, 
@@ -201,24 +221,6 @@ def is_working_time(cur_date : datetime,
             return False
     
     return True
-
-def get_next_workday(cur_date : datetime, reverse = False, 
-                    work_over = False, sat_over = False,
-                    sun_over = False, hol_over = False) -> datetime:
-
-    k = 1 if reverse is False else -1
-    
-    c = cur_date + timedelta(days=1) * k
-    while not is_working_day(c, sat_over = sat_over, sun_over = sun_over, hol_over = hol_over):
-        c = c + k * timedelta(days=1)
-    
-    pass
-    if reverse is False:
-        c = c.replace(hour=DateCalc.work_beg[0], minute=DateCalc.work_beg[1], second=0, microsecond=0)
-    else:
-        c = get_end_of_workday(c, work_over)  #TODO сделать функцию с упором на производственный календарь, через функцию
-    
-    return c
 
 
     # Функция возвращает конец рабочего дня который ей передали ОНА не проверяет рабочий ли день ей передали
